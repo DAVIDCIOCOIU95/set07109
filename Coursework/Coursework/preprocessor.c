@@ -5,7 +5,7 @@
 #include "numberComments.h"
 #include "removeComments.h"
 
-#define myLength 1000000
+#define myLength 300000
 
 
 void processInclude(char *filename)
@@ -24,7 +24,7 @@ void processInclude(char *filename)
 	{
 		printf("Couldn't open your file.c\n");
 		exit(1);
-	} 
+	}
 
 	if (fileIn == NULL)
 	{
@@ -34,93 +34,86 @@ void processInclude(char *filename)
 
 	char line[myLength];
 	char myHeaderName[100];
-	
+	// Holds include therm 
+	char *includeString = "#include";
+	char headerLine[myLength];
 
 	while (!feof(myFile))
 	{
 		// Reading the line into line[]
 		if (fgets(line, myLength, myFile) != NULL)
 		{
-			// Loop through each char in line[]
-			for (int i = 0; i < strlen(line); ++i)
+			if (strstr(line, includeString))
 			{
-				// Check if char[] == #
-				if (line[i] == '#')
+				printf("It's an include line!\n");
+
+				// Get from the line the name removing #include and quotes 
+				for (int k = 0; k < strlen(line); ++k)
 				{
-					// Holds include therm 
-					char *includeString = "#include";
+					if (line[k + 10] != '"')
+					{
+						myHeaderName[k] = line[k + 10];
+					}
 
-					// Check for the presence of #include and pass the header file without quotes to an array (myHeaderName)
-						if (strstr(line, includeString))
-						{
-							printf("It's an include line!\n");
-
-							// Get from the line the name removing #include and quotes 
-							for (int k = 0; k < strlen(line); ++k)
-							{
-								if (line[k + 10] != '"')
-								{
-									myHeaderName[k] = line[k + 10];
-								}
-
-								else if (line[k + 10] == '"')
-								{
-									myHeaderName[k] = '\0';
-									break;
-								}
-								
-
-							}
-
-							printf("%s\n", myHeaderName);
-							
-
-							
-							//Open the .h file
-							FILE *myHeaderFile;
-							myHeaderFile = fopen("string_functions.h", "r");
-
-							if (myHeaderFile == NULL)
-							{
-								printf("Couldn't open your file.txt\n");
-
-							}
-
-						
-							char headerLine[myLength];
-							
-							
-							while (!feof(myHeaderFile))
-							{
-								
-								
-								// Reading the line into line[]
-								fgets(headerLine, myLength, myHeaderFile);
-								
-									printf("Hello\n");
-							    
-								
-							}
-						
-							
-						
-					
-							fclose(myHeaderFile);
-
-							break;
-						}
-					
-				} // End if #
+					else if (line[k + 10] == '"')
+					{
+						myHeaderName[k] = '\0';
+						break;
+					}
 
 
-				/*
-				else if (line[0] != '#')
-				{
-					fprintf(fileIn, "%s", line);
 				}
-				*/
 
+				printf("%s\n", myHeaderName);
+
+
+
+				//Open the .h file
+				FILE *myHeaderFile;
+				myHeaderFile = fopen("string_functions.h", "r");
+
+				if (myHeaderFile == NULL)
+				{
+					printf("Couldn't open your file.txt\n");
+
+				}
+
+				else
+				{
+					printf("File is working\n");
+				}
+
+
+
+
+
+				while (!feof(myHeaderFile))
+				{
+
+					printf("Hello\n");
+					// Reading the line into line[]
+					fgets(headerLine, myLength, myHeaderFile);
+					printf("%s", headerLine);
+
+
+
+				}
+				fclose(myHeaderFile);
+
+				break;
 			}
+
+			//} // End if #
+
+
+			/*
+			else if (line[0] != '#')
+			{
+				fprintf(fileIn, "%s", line);
+			}
+			*/
+
+			//}
 		}
 	}
 
@@ -158,13 +151,13 @@ int main(int argc, char **argv)
 		//nonEmptyLines(filename);
 		//numberComments(filename);
 		processInclude(filename);
-		
-		/*// just create an .o file 
+
+		/*// just create an .o file
 		// Create a .o from filename
 		int length = strlen(filename) - 1;
 		filename[length] = 'o';
 		char *fileO = filename;
-		// Write a file 
+		// Write a file
 		FILE *fileIn;
 		fileIn = fopen(fileO, "w");
 		fclose(fileIn);
