@@ -14,7 +14,7 @@ nmake preprocess
 
 Options:
 preprocess -i name_file.c
-preprocess -c name_file.c
+preprocess -i name_file.c -c
 
 Description:
 an App that counts the number of non-empty lines in a .c file;
