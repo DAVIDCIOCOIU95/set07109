@@ -5,7 +5,7 @@
 #define Z 25
 #define PI 3.142
 #define E 2.71828
-#define SPEED_OF_LIGHT 299792458 
+#define SPEED_OF_LIGHT 299792458
 
 #include "string_functions.h"
 
@@ -47,7 +47,7 @@ double divide_by_const(int n)
 double average(int size, int *array) 
 {
     int total = 0; // Store a running total.
-    for(int i=0; i<size; i++) 
+    for(int i=0; i<size; i++)
     {
         total += array[i];
     }
