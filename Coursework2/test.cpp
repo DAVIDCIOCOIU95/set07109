@@ -8,6 +8,8 @@ int main(int argc, char **argv)
 	// Test 1 - basic constructor
     BinarySearchTree *tree = new BinarySearchTree();
     string str = tree->inorder();
+    //cout << "Printing root: " <<  tree->printRoot() << endl;
+    //cout << "Printing in order: "<<tree->inorder();
     if (str != string(""))
         cerr << "ERROR - test 1 failed (basic constructor)" << endl;
     else
@@ -17,11 +19,11 @@ int main(int argc, char **argv)
     // Test 2 - single value constructor
     tree = new BinarySearchTree("hello");
     str = tree->inorder();
+    //cout << str << endl;
    
     if (str != string("hello"))
     {
         cerr << "ERROR - test 2 failed (single value constructor)" << endl;
-        //tree->printRoot();
     }
         
     else
@@ -38,14 +40,18 @@ int main(int argc, char **argv)
     tree->insert("dog");
     tree->insert("cat");
     str = tree->inorder();
+    //cout << tree->inorder() << endl;
+   // cout << "Printing root: " <<  tree->printRoot() << endl;
+   // cout << str << endl;
     
-    if (str != string("aardvark cat dog fish zeebra "))
+    if (str != string("aardvark cat dog fish zeebra"))
         cerr << "ERROR - test 3 failed (insertion check)" << endl;
     else
         cout << "Test 3 passed (insertion check)" << endl;
     
     // Test 4 - exists check
-    
+    //cout<<(tree->inorder())<<endl;
+    // cout << tree->exists("zeebra") << endl;
     if (tree->exists("zeebra") && tree->exists("cat") && !tree->exists("bird") && !tree->exists("snake"))
         cout << "Test 4 passed (exists check)" << endl;
     else
@@ -60,6 +66,7 @@ int main(int argc, char **argv)
    vec.push_back("cat");
    BinarySearchTree *fromVector = new BinarySearchTree(vec);
    str = fromVector->inorder();
+   //cout << str << endl;
    if (str != string("aardvark cat dog fish zeebra"))
         cerr << "ERROR - test 5 failed (vector constructor)" << endl;
    else
@@ -70,6 +77,7 @@ int main(int argc, char **argv)
     // Test 6a - copy constructor part 1
     BinarySearchTree *tree2 = new BinarySearchTree(*tree);
     str = tree2->inorder();
+    //cout << tree2->inorder() << endl;
     if (str != string("aardvark cat dog fish zeebra"))
         cerr << "ERROR - test 6a failed (copy constructor part 1)" << endl;
     else
@@ -77,6 +85,8 @@ int main(int argc, char **argv)
 
     // Test 6b - copy constructor part 2
     tree2->insert("mouse");
+    //cout << "Printing tree2 inorder: " << tree2->inorder() << endl;
+    //cout << "Printing tree inorder: " << tree->inorder() << endl;
     if (tree->inorder() == tree2->inorder())
         cerr << "ERROR - test 6b failed (copy constructor part 2 - deep copy check)" << endl;
     else
@@ -86,6 +96,8 @@ int main(int argc, char **argv)
     
     // Test 7 - preorder print
     str = tree->preorder();
+    //cout << "Printing root: " <<  tree->printRoot() << endl;
+
     if (str != string("fish aardvark dog cat zeebra"))
         cerr << "ERROR - test 7 failed (pre-order print)" << endl;
     else

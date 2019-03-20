@@ -39,6 +39,13 @@ public:
 
     // Prints root
     string printRoot();
+    //void copyFunction(const BinarySearchTree &rhs, Node* tree2);
+    // Removes the nodes in the tree
+    void RemoveSubtree(Node* Ptr);
+    Node* copyTree_helper(const Node* source);
+     // Returns the counter of the word in the tree
+    int findWordCounter(string word);
+
     
 
 
@@ -61,5 +68,10 @@ private:
     // Adds a leaf to BST - seen only by BST class
     void insertPrivate(string word, Node* Ptr);
     void inorderPrivate(Node* Ptr) const;
+    bool existsPrivate(string word, Node* Ptr) const;
+    void preorderPrivate(Node *Ptr) const;
+    void postorderPrivate(Node *Ptr) const;
+      // Returns the counter of the word in the tree
+    int findWordCounterPrivate(string word, Node* Ptr);
 };
 

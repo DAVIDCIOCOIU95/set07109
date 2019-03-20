@@ -1,26 +1,76 @@
 #include "BinarySearchTree.h"
 #include <iostream>
+#include <vector>
+#include <algorithm> 
+#include <string>
 
 using namespace std;
 
 // **Constructors **
 BinarySearchTree::BinarySearchTree()
 {
-	Node *tree = nullptr;
+	root = nullptr;
 }
 
 BinarySearchTree::BinarySearchTree(std::string word)
 {
-	
+	root = new Node;
+	this->root->word = word;
+	this->root->left = nullptr;
+	this->root->right = nullptr;
+	this->root->counter = 0;
 }
 
 BinarySearchTree::BinarySearchTree(const BinarySearchTree &rhs)
 {
+	root = copyTree_helper(rhs.root);
 }
+
+
+Node* BinarySearchTree::copyTree_helper(const Node* source)
+{
+	
+    if(source == nullptr)
+    {
+        return nullptr;
+    }
+	
+    Node* result = new Node;
+    result->word = source->word;
+    result->left = copyTree_helper(source->left);
+    result->right = copyTree_helper(source->right);
+    return result;
+}
+
+
 
 BinarySearchTree::BinarySearchTree(const std::vector<std::string> &words)
 {
+	for(const std::string &words : words)
+    {
+        insert(words);
+    }
 }
+
+/*
+Node* BinarySearchTree::TreeVector(const std::vector<std::string> &words)
+{
+	Node* myTreeVec = new Node;
+	int counter = 0;
+	string myWord = "";
+	while(counter < words.size())
+	{
+		myWord = "";
+		myWord = words[counter];
+		++counter;
+	}
+	//cout << myTreeVec->root->left->right->left->word << endl;
+	return myTreeVec;
+}
+*/
+
+
+
 //destructor
 BinarySearchTree::~BinarySearchTree()
 {
@@ -32,10 +82,7 @@ void BinarySearchTree::insert(string word)
 	insertPrivate(word, root);
 }
 
-bool BinarySearchTree::exists(std::string word) const
-{
-	return false; // change this to implement the method, returning true if word exists
-}
+
 
 void BinarySearchTree::insertPrivate(string word, Node *Ptr)
 {
@@ -45,6 +92,13 @@ void BinarySearchTree::insertPrivate(string word, Node *Ptr)
 	{
 		// Create a leaf on the root with key from main
 		root = CreateLeaf(word);
+	}
+	// Key equal to node
+	// do not add and increment node counter
+	else if(word == Ptr->word)
+	{
+		//cout << "The key *" << word << "* has already been added. Incrementing Counter" << endl;
+		Ptr->counter++;
 	}
 
 	// TREE NOT EMPTY
@@ -76,20 +130,49 @@ void BinarySearchTree::insertPrivate(string word, Node *Ptr)
 			Ptr->right = CreateLeaf(word);
 		}
 	}
-	// Key equal to node
-	// do not add and increment node counter
-	else
-	{
-		cout << "The key" << word << "has already been added" << endl;
-		Ptr->counter = Ptr->counter + 1;
-	}
 }
 
-string static myString; 
+bool BinarySearchTree::exists(std::string word) const
+{
+	bool myAnswer = existsPrivate(word, root);
+	return myAnswer; 
+}
+
+bool BinarySearchTree::existsPrivate(string word, Node* ptr) const
+{
+	if(ptr != nullptr)
+	{
+		if(word.compare(ptr->word) == 0)
+		{
+			return true;
+		}
+		else
+		{
+			if((word.compare(ptr->word))<0) // Recursion left
+			{
+					return existsPrivate(word, ptr->left);
+			}
+			else // Recursion right
+			{
+					return existsPrivate(word, ptr->right);
+			}	
+		}	
+	}
+	return false;
+}
+
+
+// inorderPrivate will output to myString 
+string myString;
 string BinarySearchTree::inorder() const
 {
 	inorderPrivate(root);
 	string myNewString = myString;
+	// Check if not equal to "", if so remove the last " " printed in inorderPrivate
+	if(myNewString != "")
+		myNewString.pop_back();
+	// set myString back to ""
+	myString = "";
 	return myNewString;
 	
 }
@@ -110,24 +193,74 @@ void BinarySearchTree::inorderPrivate(Node *Ptr) const
 			inorderPrivate(Ptr->right);
 		}
 	}
+	/*
 	// Tree empty
 	else
 	{
 		cout << "\nThe tree is empty" << endl;
 	}
+	*/
 }
 
 std::string BinarySearchTree::preorder() const
 {
-	return std::string(""); // change this to return a string representation of the words
-							// in the tree preorder.
+	preorderPrivate(root);
+	string myNewString = myString;
+	// Check if not equal to "", if so remove the last " " printed in inorderPrivate
+	if(myNewString != "")
+		myNewString.pop_back();
+	// set myString back to ""
+	myString = "";
+	//cout << myNewString << endl;
+	return myNewString;
+}
+
+void BinarySearchTree::preorderPrivate(Node *Ptr) const
+{
+	// Tree not Empty
+	if (root != nullptr)
+	{
+		myString = myString + Ptr->word + " ";
+		if (Ptr->left != nullptr)
+		{
+			preorderPrivate(Ptr->left);
+		}
+		if (Ptr->right != nullptr)
+		{
+			preorderPrivate(Ptr->right);
+		}
+	}
 }
 
 std::string BinarySearchTree::postorder() const
 {
-	return std::string(""); // change this to return a string representation of the words
-							// in the tree postorder.
+	postorderPrivate(root);
+	string myNewString = myString;
+	// Check if not equal to "", if so remove the last " " printed in inorderPrivate
+	if(myNewString != "")
+		myNewString.pop_back();
+	// set myString back to ""
+	myString = "";
+	//cout << myNewString << endl;
+	return myNewString;
 }
+void BinarySearchTree::postorderPrivate(Node *Ptr) const
+{
+	// Tree not Empty
+	if (root != nullptr)
+	{
+		if (Ptr->left != nullptr)
+		{
+			postorderPrivate(Ptr->left);
+		}
+		if (Ptr->right != nullptr)
+		{
+			postorderPrivate(Ptr->right);
+		}
+		myString = myString + Ptr->word + " ";
+	}
+}
+
 
 // ----------------------------------------------------------------
 // **My methods**
@@ -135,19 +268,47 @@ string BinarySearchTree::printRoot()
 {
 	if (root != nullptr)
 	{
-		return root->word;
+		return root->right->word;
 	}
 	else
-		return "Nothing";
+		return "Your root is empty";
 }
 
 BinarySearchTree::Node *BinarySearchTree::CreateLeaf(string word)
 {
 	Node *n = new Node;
 	n->word = word;
+	n->counter = 1;
 	n->left = nullptr;
 	n->right = nullptr;
+	
 	return n;
+}
+
+int BinarySearchTree::findWordCounter(string word)
+{
+	return findWordCounterPrivate(word, root);
+}
+int BinarySearchTree::findWordCounterPrivate(string word, Node* Ptr)
+{
+	if(Ptr != nullptr)
+	{
+		if(word.compare(Ptr->word) == 0)
+		{
+			return Ptr->counter;
+		}
+		else
+		{
+			if((word.compare(Ptr->word))<0) // Recursion left
+			{
+				return existsPrivate(word, Ptr->left);
+			}
+			else // Recursion right
+			{
+				return existsPrivate(word, Ptr->right);
+			}	
+		}	
+	}
 }
 // -------------------------------------------------------------------------
 
