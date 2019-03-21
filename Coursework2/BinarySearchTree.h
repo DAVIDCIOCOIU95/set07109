@@ -39,12 +39,12 @@ public:
 
     // Prints root
     string printRoot();
-    //void copyFunction(const BinarySearchTree &rhs, Node* tree2);
     // Removes the nodes in the tree
     void RemoveSubtree(Node* Ptr);
-    Node* copyTree_helper(const Node* source);
-     // Returns the counter of the word in the tree
+    // Returns the counter of the word in the tree
     int findWordCounter(string word);
+    // Helper for the destructor
+    void DestroyRecursive(Node* Ptr);
 
     
 
@@ -62,16 +62,21 @@ private:
     //instance variables
 	Node *root = nullptr; // Pointer to the root Node of the tree
 
-    // **MyMethods** 
-     // Adds a node to the BST
+    // Adds a node to the BST
     Node* CreateLeaf(string word);
-    // Adds a leaf to BST - seen only by BST class
+    // Adds a leaf to BST 
     void insertPrivate(string word, Node* Ptr);
+    // Used by inorder to print the tree in order traversal
     void inorderPrivate(Node* Ptr) const;
+    // Used by exists to check for word existence in the tree
     bool existsPrivate(string word, Node* Ptr) const;
+    // Used by preorder to print the tree in pre order
     void preorderPrivate(Node *Ptr) const;
+    // Used by postorder to print the tree in post order
     void postorderPrivate(Node *Ptr) const;
-      // Returns the counter of the word in the tree
+    // Returns the counter of the word in the tree
     int findWordCounterPrivate(string word, Node* Ptr);
+    // Helper for tree copy constructor
+    Node* copyTreePrivate(const Node* source);
 };
 

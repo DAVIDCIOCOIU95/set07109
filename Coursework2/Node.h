@@ -15,6 +15,4 @@ struct Node
     Node *left = nullptr;
     // The right branch of the tree
     Node *right = nullptr;
-
-    
 };

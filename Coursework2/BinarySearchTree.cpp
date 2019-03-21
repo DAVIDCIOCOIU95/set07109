@@ -23,11 +23,10 @@ BinarySearchTree::BinarySearchTree(std::string word)
 
 BinarySearchTree::BinarySearchTree(const BinarySearchTree &rhs)
 {
-	root = copyTree_helper(rhs.root);
+	root = copyTreePrivate(rhs.root);
 }
 
-
-Node* BinarySearchTree::copyTree_helper(const Node* source)
+Node* BinarySearchTree::copyTreePrivate(const Node* source)
 {
 	
     if(source == nullptr)
@@ -37,12 +36,10 @@ Node* BinarySearchTree::copyTree_helper(const Node* source)
 	
     Node* result = new Node;
     result->word = source->word;
-    result->left = copyTree_helper(source->left);
-    result->right = copyTree_helper(source->right);
+    result->left = copyTreePrivate(source->left);
+    result->right = copyTreePrivate(source->right);
     return result;
 }
-
-
 
 BinarySearchTree::BinarySearchTree(const std::vector<std::string> &words)
 {
@@ -52,28 +49,20 @@ BinarySearchTree::BinarySearchTree(const std::vector<std::string> &words)
     }
 }
 
-/*
-Node* BinarySearchTree::TreeVector(const std::vector<std::string> &words)
-{
-	Node* myTreeVec = new Node;
-	int counter = 0;
-	string myWord = "";
-	while(counter < words.size())
-	{
-		myWord = "";
-		myWord = words[counter];
-		++counter;
-	}
-	//cout << myTreeVec->root->left->right->left->word << endl;
-	return myTreeVec;
-}
-*/
-
-
-
 //destructor
 BinarySearchTree::~BinarySearchTree()
 {
+    DestroyRecursive(root);
+}
+
+void BinarySearchTree::DestroyRecursive(Node* Ptr)
+{
+    if (Ptr)
+    {
+        DestroyRecursive(Ptr->left);
+        DestroyRecursive(Ptr->right);
+        delete Ptr;
+    }
 }
 
 // **Methods**
@@ -81,8 +70,6 @@ void BinarySearchTree::insert(string word)
 {
 	insertPrivate(word, root);
 }
-
-
 
 void BinarySearchTree::insertPrivate(string word, Node *Ptr)
 {
@@ -97,7 +84,6 @@ void BinarySearchTree::insertPrivate(string word, Node *Ptr)
 	// do not add and increment node counter
 	else if(word == Ptr->word)
 	{
-		//cout << "The key *" << word << "* has already been added. Incrementing Counter" << endl;
 		Ptr->counter++;
 	}
 
@@ -161,7 +147,6 @@ bool BinarySearchTree::existsPrivate(string word, Node* ptr) const
 	return false;
 }
 
-
 // inorderPrivate will output to myString 
 string myString;
 string BinarySearchTree::inorder() const
@@ -211,7 +196,6 @@ std::string BinarySearchTree::preorder() const
 		myNewString.pop_back();
 	// set myString back to ""
 	myString = "";
-	//cout << myNewString << endl;
 	return myNewString;
 }
 
@@ -241,9 +225,10 @@ std::string BinarySearchTree::postorder() const
 		myNewString.pop_back();
 	// set myString back to ""
 	myString = "";
-	//cout << myNewString << endl;
+
 	return myNewString;
 }
+
 void BinarySearchTree::postorderPrivate(Node *Ptr) const
 {
 	// Tree not Empty
@@ -261,9 +246,8 @@ void BinarySearchTree::postorderPrivate(Node *Ptr) const
 	}
 }
 
-
-// ----------------------------------------------------------------
 // **My methods**
+
 string BinarySearchTree::printRoot()
 {
 	if (root != nullptr)
@@ -289,6 +273,7 @@ int BinarySearchTree::findWordCounter(string word)
 {
 	return findWordCounterPrivate(word, root);
 }
+
 int BinarySearchTree::findWordCounterPrivate(string word, Node* Ptr)
 {
 	if(Ptr != nullptr)
@@ -310,12 +295,12 @@ int BinarySearchTree::findWordCounterPrivate(string word, Node* Ptr)
 		}	
 	}
 }
-// -------------------------------------------------------------------------
 
 // **Operator overloads**
 
 BinarySearchTree &BinarySearchTree::operator+(std::string word)
 {
+	insert(word);
 	return *this; // returns a reference to the modified tree
 }
 
