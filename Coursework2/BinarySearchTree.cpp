@@ -18,7 +18,7 @@ BinarySearchTree::BinarySearchTree(std::string word)
 	this->root->word = word;
 	this->root->left = nullptr;
 	this->root->right = nullptr;
-	this->root->counter = 0;
+	this->root->counter = 1;
 }
 
 BinarySearchTree::BinarySearchTree(const BinarySearchTree &rhs)
@@ -306,5 +306,8 @@ BinarySearchTree &BinarySearchTree::operator+(std::string word)
 
 BinarySearchTree &BinarySearchTree::operator=(const BinarySearchTree &rhs)
 {
+	Node* myNewTree = copyTreePrivate(rhs.root);
+	DestroyRecursive(root);
+	root = myNewTree;
 	return *this;
 }
